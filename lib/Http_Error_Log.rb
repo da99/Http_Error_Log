@@ -2,16 +2,19 @@ require 'Http_Error_Log/version'
 require 'Split_Lines'
 require 'time'
 
-def Http_Error_Log file
+def Http_Error_Log file, skip = nil
   h = Http_Error_Log_Helper
   
   lines = Split_Lines(File.read( file ))
   lines
   .map { |l| 
-    
+
     pieces = l.split %r!,?\s+([\w\_\.\-]+):\s+! 
+    
     prefix = pieces.shift
-    time, err, msg = h.to_time(prefix)
+    time_str = prefix.split[0,2].join(' ') 
+    
+    next if skip && Time.parse(time_str) <= Time.parse(skip)
     
     pieces.each_index { |i|
       if i.even?
@@ -20,12 +23,11 @@ def Http_Error_Log file
     }
     
     final = Hash[ *pieces ]
-
-    final[:created_at] = time
-    final[:error]  =  err
-    final[:msg]    =  msg
+    final[:created_at], final[:error], final[:msg] = h.to_time(prefix)
+    
     final
-  }
+    
+  }.compact
 end # === def Http_Error_Log
   
 class Http_Error_Log_Helper

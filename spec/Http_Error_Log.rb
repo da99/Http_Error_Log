@@ -51,3 +51,13 @@ describe "Http_Error_Log 'file'" do
 
 end # === Http_Error_Log 'file'
 
+describe "Http_Error_Log :file, \"date time\"" do
+  
+  it "skips all entries that come after a specified" do
+    target = NGINX_ERROR_LOG[1, NGINX_ERROR_LOG.size]
+    Http_Error_Log("spec/file/nginx.error.log", "2012/01/01 01:01:01 ")
+    .should == target
+  end
+  
+end # === Http_Error_Log :file, \"skip\"
+
