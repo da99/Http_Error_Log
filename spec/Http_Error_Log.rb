@@ -71,5 +71,11 @@ describe "Http_Error_Log :file, \"date time\"" do
     .should == target
   end
   
+  it "accepts a Time object instead of a String" do
+    target = NGINX_ERROR_LOG[1, NGINX_ERROR_LOG.size]
+    Http_Error_Log("spec/file/nginx.error.log", Time.parse("2012/01/01 01:01:01 "))
+    .should == target
+  end
+
 end # === Http_Error_Log :file, \"skip\"
 

@@ -5,6 +5,13 @@ require 'time'
 def Http_Error_Log file, skip = nil
   h = Http_Error_Log_Helper
   count = 0
+  skip  = case skip
+          when Time, NilClass
+            skip
+          else
+            Time.parse skip
+          end
+
   lines = Split_Lines(File.read( file ))
   lines
   .map { |l| 
@@ -14,7 +21,7 @@ def Http_Error_Log file, skip = nil
     prefix = pieces.shift
     time_str = prefix.split[0,2].join(' ') 
     
-    next if skip && Time.parse(time_str) <= Time.parse(skip)
+    next if skip && Time.parse(time_str) <= skip
     
     pieces.each_index { |i|
       if i.even?
