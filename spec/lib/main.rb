@@ -20,6 +20,17 @@ require 'Http_Error_Log'
 require 'Bacon_Colored'
 require 'pry'
 
+# ======== Custom code =============
+#
+
+NGINX_ERROR_LOG = Http_Error_Log("spec/file/nginx.error.log")
+EMPTY_LOG       = Http_Error_Log("spec/file/empty.log")
+
+class Bacon::Context
+  def key_should_be k, v
+    NGINX_ERROR_LOG.first[k].should == v
+  end
+end
 
 # ======== Include the tests.
 target_files = ARGV[1, ARGV.size - 1].select { |a| File.file?(a) }
