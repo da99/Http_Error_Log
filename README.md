@@ -2,7 +2,8 @@
 Http\_Error\_Log
 ================
 
-A Ruby gem.
+A Ruby gem to turn an error log (eg Nginx error.log) into
+a Ruby data structure.
 
 Installation
 ------------
@@ -14,7 +15,15 @@ Usage
 
     require "Http_Error_Log"
     
-    Http_Error_Log
+    Http_Error_Log "/my/nginx/error.log"
+    # -->  [ Hash, Hash, Hash ]
+
+Each Hash object has:
+
+    :line        => 12   # Integer
+    :created_at  => Time.parse(str)  # Time object.
+    :backtrace   => [ "file:num:[error] 11563#0"] 
+    :message     => "*183 connect() failed (111: Connection refused) while connecting to upstream"
 
 
 Run Tests
