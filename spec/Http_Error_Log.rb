@@ -37,12 +37,24 @@ describe "Http_Error_Log 'file'" do
   it "sets key: :referrer" do
     key_should_be :referrer, '"http://www.test.com/"'
   end
-  
 
-  it "sets key: upstream" do
+  it "sets key: :upstream" do
     key_should_be :upstream, "http://127.0.0.1:4567/test/en-us/Test-Page.css?time=1234.5678".inspect
   end
   
+  it "sets key: :line" do
+    key_should_be :line, 1
+    NGINX_ERROR_LOG[1][:line]
+    .should == 2
+  end
+  
+  it "sets key: :msg" do
+    key_should_be :msg, "*183 connect() failed (111: Connection refused) while connecting to upstream"
+  end
+  
+  it "sets key: :error" do
+    key_should_be :error, "[error] 11563#0"
+  end
   
   it "returns an empty array if file is empty" do
     EMPTY_LOG

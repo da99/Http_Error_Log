@@ -25,10 +25,13 @@ Usage
 
 Each Hash object has:
 
-    :line        => 12   # Integer
     :created_at  => Time.parse(str)  # Time object.
-    :backtrace   => [ "file:num:[error] 11563#0"] 
-    :message     => "*183 connect() failed (111: Connection refused) while connecting to upstream"
+    :msg         => "*183 connect() failed (111: Connection refused) while connecting to upstream"
+    :error       => "[error] 11563#0"
+    :line        => 5                 # line number in file
+
+    # plus the other fiends in the file:
+    #  :upstream, :server, :request, etc.
 
 Skip records using a date/time string:
 

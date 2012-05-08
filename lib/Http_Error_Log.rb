@@ -4,11 +4,11 @@ require 'time'
 
 def Http_Error_Log file, skip = nil
   h = Http_Error_Log_Helper
-  
+  count = 0
   lines = Split_Lines(File.read( file ))
   lines
   .map { |l| 
-
+    count += 1
     pieces = l.split %r!,?\s+([\w\_\.\-]+):\s+! 
     
     prefix = pieces.shift
@@ -24,6 +24,7 @@ def Http_Error_Log file, skip = nil
     
     final = Hash[ *pieces ]
     final[:created_at], final[:error], final[:msg] = h.to_time(prefix)
+    final[:line] = count
     
     final
     
@@ -53,9 +54,11 @@ class Http_Error_Log_Helper
       date = pieces.shift
       time = pieces.shift
 
-      err, msg = pieces.join(' ').split(':')
+      raw_err = pieces.join(' ').split(':')
+      err = raw_err.shift
+      msg = raw_err.join(':')
 
-      [ Time.parse("#{date} #{time}" ), err, msg]
+      [ Time.parse("#{date} #{time}" ), err.strip, msg.strip]
     end
 
   end # === << self
